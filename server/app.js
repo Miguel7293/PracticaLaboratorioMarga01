@@ -1,6 +1,11 @@
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import cors from 'cors';
+import productsRouter from './routes/products.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -8,10 +13,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// API Routes
-app.use('/api/products', require('./routes/products'));
+// Rutas
+app.use('/api/products', productsRouter);
 
-// Sirve el frontend en producción
+// Configuración para producción
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get('*', (req, res) => {

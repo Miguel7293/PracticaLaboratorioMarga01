@@ -1,6 +1,6 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
-const productsRouter = require('./routes/products');
 
 const app = express();
 
@@ -8,11 +8,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Rutas
-app.use('/api/products', productsRouter);
+// API Routes
+app.use('/api/products', require('./routes/products'));
 
-// Servir imágenes estáticas
-app.use('/images', express.static('public/images'));
+// Sirve el frontend en producción
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
